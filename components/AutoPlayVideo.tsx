@@ -29,18 +29,27 @@ export default function AutoPlayVideo({
     if (!video) return;
 
     let cancelled = false;
-    // Optimistically treat the clip as visible so it starts immediately; the
-    // observer below flips this to false when it's actually off-screen.
-    let inView = true;
+    // Starts false: a clip is only played once it nears the viewport, so we
+    // never buffer/decode every video on the page at once.
+    let nearViewport = false;
 
     const tryPlay = () => {
-      if (cancelled || !inView || !video.paused) return;
+      if (cancelled || !nearViewport || !video.paused) return;
       const promise = video.play();
       if (promise && typeof promise.catch === "function") {
         promise.catch(() => {
           /* Autoplay can be rejected; the next trigger will retry. */
         });
       }
+    };
+
+    // Defer the actual download until we're about to need it.
+    const activate = () => {
+      if (video.getAttribute("preload") !== "auto") {
+        video.setAttribute("preload", "auto");
+        video.load();
+      }
+      tryPlay();
     };
 
     const restart = () => {
@@ -53,42 +62,51 @@ export default function AutoPlayVideo({
     };
 
     // A pause we didn't ask for (browser throttling, decode hiccup, etc.)
-    // shouldn't leave the clip frozen — resume it.
+    // shouldn't leave the clip frozen — resume it while it's near the viewport.
     const onPause = () => {
-      if (inView) tryPlay();
+      if (nearViewport) tryPlay();
     };
 
     video.addEventListener("pause", onPause);
     video.addEventListener("ended", restart);
     document.addEventListener("visibilitychange", onVisibility);
 
-    // Play while on screen, pause (and remember) when scrolled away.
-    let observer: IntersectionObserver | undefined;
-    if (typeof IntersectionObserver !== "undefined") {
-      observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            inView = entry.isIntersecting;
-            if (inView) {
-              tryPlay();
-            } else {
-              video.pause();
-            }
-          });
-        },
-        { threshold: 0.05 }
-      );
-      observer.observe(video);
+    if (typeof IntersectionObserver === "undefined") {
+      // No observer support: fall back to plain autoplay.
+      nearViewport = true;
+      activate();
+      return () => {
+        cancelled = true;
+        video.removeEventListener("pause", onPause);
+        video.removeEventListener("ended", restart);
+        document.removeEventListener("visibilitychange", onVisibility);
+      };
     }
 
-    tryPlay();
+    // Start loading/playing ~300px before the clip enters the viewport and
+    // pause it once it has scrolled well out of sight. Keeps at most the few
+    // on-screen videos decoding at once instead of every video on the page.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          nearViewport = entry.isIntersecting;
+          if (nearViewport) {
+            activate();
+          } else {
+            video.pause();
+          }
+        });
+      },
+      { rootMargin: "300px 0px", threshold: 0 }
+    );
+    observer.observe(video);
 
     return () => {
       cancelled = true;
       video.removeEventListener("pause", onPause);
       video.removeEventListener("ended", restart);
       document.removeEventListener("visibilitychange", onVisibility);
-      observer?.disconnect();
+      observer.disconnect();
     };
   }, []);
 
@@ -97,11 +115,10 @@ export default function AutoPlayVideo({
       ref={videoRef}
       className={className}
       {...props}
-      autoPlay
       muted
       loop
       playsInline
-      preload="auto"
+      preload="none"
     />
   );
 }

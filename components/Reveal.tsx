@@ -69,7 +69,6 @@ export default function Reveal({
         // The transform is removed once revealed so it doesn't create a
         // containing block for fixed-position children (e.g. the toast).
         transform: visible ? "none" : "translateY(24px)",
-        willChange: visible ? "auto" : "opacity, transform",
       }}
     >
       {children}
