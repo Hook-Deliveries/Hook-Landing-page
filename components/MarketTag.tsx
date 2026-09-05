@@ -1,3 +1,5 @@
+import AutoPlayVideo from "@/components/AutoPlayVideo";
+
 export default function MarketTag() {
   return (
     <div className="relative flex items-center w-max font-sans drop-shadow-sm">
@@ -35,11 +37,7 @@ export default function MarketTag() {
 
         {/* Inner GIF Image Container */}
         <div className="relative w-[78px] h-[78px] rounded-full overflow-hidden bg-[#F5F5F5] z-20 shadow-inner">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
+          <AutoPlayVideo
             src="/videos/box.mp4"
             className="h-full w-full object-cover"
           />

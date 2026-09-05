@@ -1,22 +1,45 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 
+const EMPTY_FORM = {
+  fullName: "",
+  whatsapp: "",
+  email: "",
+  location: "",
+  market: "",
+};
+
+type Toast = { type: "success" | "error"; message: string } | null;
+
 export default function MarketAssociateCards() {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    whatsapp: "",
-    email: "",
-    location: "",
-    market: "",
-  });
+  const [formData, setFormData] = useState(EMPTY_FORM);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [toast, setToast] = useState<Toast>(null);
+  const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showToast = (type: "success" | "error", message: string) => {
+    setToast({ type, message });
+    if (hideTimer.current) clearTimeout(hideTimer.current);
+    hideTimer.current = setTimeout(() => setToast(null), 4000);
+  };
+
+  // Clear the auto-hide timer if the component unmounts mid-show.
+  useEffect(
+    () => () => {
+      if (hideTimer.current) clearTimeout(hideTimer.current);
+    },
+    []
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       await emailjs.send(
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
@@ -30,10 +53,14 @@ export default function MarketAssociateCards() {
         },
         { publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY! }
       );
-      alert("Application submitted successfully!");
+      // Success: notify with a green toast, then reset the form so it's empty.
+      setFormData(EMPTY_FORM);
+      showToast("success", "Application successful!");
     } catch (error) {
       console.error("EmailJS error:", error);
-      alert("Something went wrong. Please try again.");
+      showToast("error", "Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -168,14 +195,56 @@ export default function MarketAssociateCards() {
               />
               <button
                 type="submit"
-                className="w-full mt-2 bg-[#FACC15] hover:bg-[#EAB308] text-white font-bold text-[16px] py-4 rounded-full transition-colors shadow-md"
+                disabled={isSubmitting}
+                className="w-full mt-2 bg-[#FACC15] hover:bg-[#EAB308] text-white font-bold text-[16px] py-4 rounded-full transition-colors shadow-md disabled:opacity-70"
               >
-                Submit
+                {isSubmitting ? "Submitting..." : "Submit"}
               </button>
             </form>
           </div>
         </div>
       </div>
+
+      {/* Success / error toast */}
+      {toast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-3 rounded-full py-3 px-6 font-bold text-[15px] shadow-2xl ${
+            toast.type === "success"
+              ? "bg-green-600 text-white"
+              : "bg-red-600 text-white"
+          }`}
+        >
+          <span
+            className={`flex h-5 w-5 items-center justify-center rounded-full ${
+              toast.type === "success" ? "bg-green-500" : "bg-red-500"
+            }`}
+          >
+            {toast.type === "success" ? (
+              <svg viewBox="0 0 24 24" fill="none" className="h-3.5 w-3.5">
+                <path
+                  d="M5 13l4 4L19 7"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" className="h-3.5 w-3.5">
+                <path
+                  d="M6 6l12 12M18 6L6 18"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                />
+              </svg>
+            )}
+          </span>
+          {toast.message}
+        </div>
+      )}
     </section>
   );
 }

@@ -1,14 +1,12 @@
+import AutoPlayVideo from "@/components/AutoPlayVideo";
+
 export default function MoreChoicesCard() {
   return (
     <div className="w-full max-w-[320px] bg-[#B9B8FF] rounded-[32px] flex flex-col shadow-sm font-sans pt-2 px-2 pb-0">
       {/* Top Section (Off-White Background & Video) */}
       <div className="bg-[#FBFBFB] w-full h-[240px] rounded-[26px] relative flex items-center justify-center p-6 shadow-sm">
         <div className="relative w-[140px] h-[140px]">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
+          <AutoPlayVideo
             src="/videos/valueprops-middle.mp4"
             className="h-full w-full object-contain"
           />

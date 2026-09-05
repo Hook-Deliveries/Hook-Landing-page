@@ -1,4 +1,5 @@
 import Image from "next/image";
+import AutoPlayVideo from "@/components/AutoPlayVideo";
 
 export default function Hero() {
   return (
@@ -18,11 +19,7 @@ export default function Hero() {
 
         {/* Right: video */}
         <div className="mx-auto w-full max-w-sm">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
+          <AutoPlayVideo
             src="/videos/market-cards.mp4"
             className="h-auto w-full"
           />

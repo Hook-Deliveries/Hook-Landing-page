@@ -6,7 +6,7 @@ export default function NoCrowdsCard() {
       {/* Top Section (Text Content) */}
       <div className="p-8 pb-2 relative z-10">
         <h3 className="text-[26px] font-bold text-white mb-3 tracking-tight">
-          No Crowds
+          No Crowd
         </h3>
         <p className="text-[17px] text-gray-300 font-medium leading-snug pr-4">
           Browse the best stalls without the pushing and shoving.

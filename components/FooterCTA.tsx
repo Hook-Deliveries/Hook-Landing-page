@@ -111,6 +111,14 @@ export default function FooterCTA() {
   );
 }
 
+/* --- Social links --- */
+const SOCIAL_URLS: Record<"instagram" | "facebook" | "x" | "tiktok", string> = {
+  instagram: "https://www.instagram.com/hook.africa/",
+  facebook: "https://www.facebook.com/hookafrica",
+  x: "https://x.com/hookafrica",
+  tiktok: "https://www.tiktok.com/@hookafrica",
+};
+
 /* --- Reusable Social Icon Component --- */
 function SocialIcon({ type }: { type: "instagram" | "facebook" | "x" | "tiktok" }) {
   const icons = {
@@ -121,10 +129,16 @@ function SocialIcon({ type }: { type: "instagram" | "facebook" | "x" | "tiktok" 
   };
 
   return (
-    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-black rounded-full flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
+    <a
+      href={SOCIAL_URLS[type]}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Hook on ${type}`}
+      className="w-10 h-10 sm:w-12 sm:h-12 bg-black rounded-full inline-flex items-center justify-center hover:scale-110 hover:bg-[#FFC107] transition-all"
+    >
       <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
         {icons[type]}
       </svg>
-    </div>
+    </a>
   );
 }

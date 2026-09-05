@@ -1,3 +1,5 @@
+import AutoPlayVideo from "@/components/AutoPlayVideo";
+
 export default function NoTrafficCard() {
   return (
     <div className="w-full max-w-[320px] h-[480px] bg-black rounded-[32px] flex flex-col overflow-hidden shadow-xl font-sans border border-white/5">
@@ -15,11 +17,7 @@ export default function NoTrafficCard() {
       <div className="relative w-full flex-1 mt-auto bg-black">
         {/* Subtle gradient overlay at the top for a seamless blend */}
         <div className="absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-black to-transparent z-10" />
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
+        <AutoPlayVideo
           src="/videos/traffic-light.mp4"
           className="absolute inset-0 h-full w-full object-cover object-bottom"
         />

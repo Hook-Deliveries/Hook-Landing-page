@@ -1,3 +1,5 @@
+import AutoPlayVideo from "@/components/AutoPlayVideo";
+
 export default function HookTag() {
   return (
     <div className="relative flex items-center w-max font-sans drop-shadow-sm">
@@ -30,11 +32,7 @@ export default function HookTag() {
 
         {/* Inner GIF Image Container (Light Blue) */}
         <div className="relative w-[78px] h-[78px] rounded-full overflow-hidden bg-[#7EBAE1] z-20 shadow-inner flex items-center justify-center">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
+          <AutoPlayVideo
             src="/videos/payment.mp4"
             className="h-full w-full object-contain p-1.5"
           />

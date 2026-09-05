@@ -13,10 +13,10 @@ export default function Navbar() {
         {/* Logo Section */}
         <Link href="/" className="relative flex items-center hover:scale-105 transition-transform">
           <Image
-            src="/images/Hook..png"
+            src="/images/hook-logo.png"
             alt="Hook Logo"
             width={110}
-            height={48}
+            height={51}
             className="object-contain"
             priority
           />

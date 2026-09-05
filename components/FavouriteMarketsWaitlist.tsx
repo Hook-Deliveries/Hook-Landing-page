@@ -2,15 +2,29 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import emailjs from "@emailjs/browser";
 
 export default function FavouriteMarketsWaitlist() {
   const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Integrate your EmailJS or API waitlist logic here
-    alert("Joined waitlist!");
-    setEmail("");
+    setStatus("loading");
+
+    try {
+      await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_WAITLIST_TEMPLATE_ID!,
+        { waitlist_email: email },
+        { publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY! }
+      );
+      setStatus("success");
+      setEmail("");
+    } catch (error) {
+      console.error("EmailJS Error:", error);
+      setStatus("error");
+    }
   };
 
   return (
@@ -45,11 +59,23 @@ export default function FavouriteMarketsWaitlist() {
               />
               <button
                 type="submit"
-                className="w-full sm:w-auto bg-[#FFC107] hover:bg-[#F0B400] text-white font-bold py-3.5 px-8 rounded-full transition-colors whitespace-nowrap"
+                disabled={status === "loading"}
+                className="w-full sm:w-auto bg-[#FFC107] hover:bg-[#F0B400] text-white font-bold py-3.5 px-8 rounded-full transition-colors whitespace-nowrap disabled:opacity-70"
               >
-                Join Waitlist
+                {status === "loading" ? "Joining..." : "Join Waitlist"}
               </button>
             </form>
+
+            {status === "success" && (
+              <p className="text-green-600 font-medium mb-2">
+                You&rsquo;ve been added to the waitlist!
+              </p>
+            )}
+            {status === "error" && (
+              <p className="text-red-500 font-medium mb-2">
+                Something went wrong. Please try again.
+              </p>
+            )}
 
             <p className="text-gray-500 text-[15px]">
               Get notified when Hook goes live.{" "}
