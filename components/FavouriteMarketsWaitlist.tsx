@@ -16,7 +16,13 @@ export default function FavouriteMarketsWaitlist() {
       await emailjs.send(
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
         process.env.NEXT_PUBLIC_EMAILJS_WAITLIST_TEMPLATE_ID!,
-        { waitlist_email: email },
+        {
+          email,
+          waitlist_email: email,
+          from_email: email,
+          reply_to: email,
+          from_name: "Hook Waitlist",
+        },
         { publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY! }
       );
       setStatus("success");
