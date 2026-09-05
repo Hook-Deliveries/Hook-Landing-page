@@ -8,7 +8,7 @@ import ValueProps from "@/components/ValueProps";
 import LogisticsFlow from "@/components/LogisticsFlow";
 import MarketAssociateCards from "@/components/MarketAssociateCards";
 import FAQSection from "@/components/FAQSection";
-import Footer from "@/components/Footer";
+import FooterCTA from "@/components/FooterCTA";
 
 export default function Home() {
   return (
@@ -23,7 +23,7 @@ export default function Home() {
       <LogisticsFlow />
       <MarketAssociateCards />
       <FAQSection />
-      <Footer />
+      <FooterCTA />
     </main>
   );
 }

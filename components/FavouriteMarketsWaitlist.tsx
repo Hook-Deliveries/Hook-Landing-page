@@ -60,16 +60,14 @@ export default function FavouriteMarketsWaitlist() {
           </div>
         </div>
 
-        {/* Right Column: Animated Video Container */}
+        {/* Right Column: Image */}
         <div className="flex-1 w-full flex justify-center lg:justify-end relative z-0 mt-12 md:mt-0">
           <div className="relative w-full max-w-[500px] aspect-[4/5] flex items-center justify-center">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              src="/videos/market-cards.mp4"
-              className="h-full w-full object-cover"
+            <Image
+              src="/images/hero-right.png"
+              alt="Hook app"
+              fill
+              className="object-cover"
             />
           </div>
         </div>
