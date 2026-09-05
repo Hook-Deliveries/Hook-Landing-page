@@ -33,7 +33,7 @@ export default function FavouriteMarketsWaitlist() {
           <div className="w-full max-w-lg">
             <form
               onSubmit={handleSubmit}
-              className="flex items-center bg-white border border-gray-300 rounded-full p-1.5 mb-4 shadow-sm focus-within:border-[#FFC107] focus-within:ring-1 focus-within:ring-[#FFC107] transition-all"
+              className="flex flex-col sm:flex-row sm:items-center bg-white border border-gray-300 rounded-[24px] sm:rounded-full p-1.5 mb-4 gap-2 sm:gap-0 shadow-sm focus-within:border-[#FFC107] focus-within:ring-1 focus-within:ring-[#FFC107] transition-all"
             >
               <input
                 type="email"
@@ -41,11 +41,11 @@ export default function FavouriteMarketsWaitlist() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email e.g hook@gmail.com"
                 required
-                className="flex-1 px-5 py-3 bg-transparent text-black outline-none placeholder-gray-400 text-[15px]"
+                className="w-full sm:flex-1 sm:min-w-0 px-5 py-3 bg-transparent text-black outline-none placeholder-gray-400 text-[15px]"
               />
               <button
                 type="submit"
-                className="bg-[#FFC107] hover:bg-[#F0B400] text-white font-bold py-3.5 px-8 rounded-full transition-colors whitespace-nowrap"
+                className="w-full sm:w-auto bg-[#FFC107] hover:bg-[#F0B400] text-white font-bold py-3.5 px-8 rounded-full transition-colors whitespace-nowrap"
               >
                 Join Waitlist
               </button>
@@ -62,12 +62,12 @@ export default function FavouriteMarketsWaitlist() {
 
         {/* Right Column: Image */}
         <div className="flex-1 w-full flex justify-center lg:justify-end relative z-0 mt-12 md:mt-0">
-          <div className="relative w-full max-w-[500px] aspect-[4/5] flex items-center justify-center">
+          <div className="relative w-full max-w-[400px] aspect-[478/543] flex items-center justify-center">
             <Image
               src="/images/hero-right.png"
               alt="Hook app"
               fill
-              className="object-cover"
+              className="object-contain"
             />
           </div>
         </div>

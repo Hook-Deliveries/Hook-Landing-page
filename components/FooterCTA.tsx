@@ -59,7 +59,7 @@ export default function FooterCTA() {
           </button>
         </form>
 
-        {status === "success" && <p className="text-green-400 font-medium mb-4">You've been added to the waitlist!</p>}
+        {status === "success" && <p className="text-green-400 font-medium mb-4">You&rsquo;ve been added to the waitlist!</p>}
         {status === "error" && <p className="text-red-400 font-medium mb-4">Something went wrong. Try again.</p>}
 
         <p className="text-gray-400 text-[15px]">
