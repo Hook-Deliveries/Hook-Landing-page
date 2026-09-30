@@ -22,6 +22,16 @@ const WAITLIST_URL = `${API_BASE}/api/v1/public/waitlist`;
 /** Minimum time the "Submitting…" state stays up, so it never just flashes. */
 const SUBMIT_DELAY_MS = 1000;
 
+/**
+ * Client-side mirror of the API's own rules, so Submit only enables on a
+ * payload the server will actually accept. The server stays authoritative —
+ * these are deliberately no stricter than its schema.
+ */
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_RE = /^\+?[0-9\s-]{7,20}$/;
+const NAME_MIN = 2;
+const CITY_MIN = 2;
+
 const EMPTY_FORM = {
   name: "",
   phone: "",
@@ -71,13 +81,25 @@ export default function WaitlistComponent({
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // Submit stays disabled until every field has content and consent is ticked.
-  const isComplete =
-    formData.name.trim() !== "" &&
-    formData.phone.trim() !== "" &&
-    formData.email.trim() !== "" &&
-    formData.city.trim() !== "" &&
-    consent;
+  // Submit stays disabled until every field is filled in *validly* and the
+  // consent box is ticked.
+  const nameOk = formData.name.trim().length >= NAME_MIN;
+  const phoneOk = PHONE_RE.test(formData.phone.trim());
+  const emailOk = EMAIL_RE.test(formData.email.trim());
+  const cityOk = formData.city.trim().length >= CITY_MIN;
+  const isComplete = nameOk && phoneOk && emailOk && cityOk && consent;
+
+  // Only start nagging once they've actually begun filling the form.
+  const hasStarted = Boolean(
+    formData.name || formData.phone || formData.email || formData.city || consent
+  );
+  const stillNeeded = [
+    !nameOk && "your name",
+    !emailOk && "a valid email",
+    !phoneOk && "a valid phone number",
+    !cityOk && "your city",
+    !consent && "your consent",
+  ].filter(Boolean) as string[];
 
   const handleClose = useCallback(() => {
     setResult(null);
@@ -101,14 +123,8 @@ export default function WaitlistComponent({
     e.preventDefault();
     if (isSubmitting) return;
 
-    if (!formData.name || !formData.email || !formData.phone || !formData.city) {
-      setError("Please fill in all fields.");
-      return;
-    }
-    if (!consent) {
-      setError("Please agree to be contacted to join the waitlist.");
-      return;
-    }
+    // The button is disabled unless this holds, so it's belt-and-braces.
+    if (!isComplete) return;
 
     setError("");
     setIsSubmitting(true);
@@ -220,7 +236,7 @@ export default function WaitlistComponent({
             name="itemInterest"
             value={formData.itemInterest}
             onChange={handleChange}
-            placeholder="What items would you like to shop from Lagos markets when we launch?"
+            placeholder="What item would you likely shop?"
             maxLength={1000}
             className="w-full px-5 py-4 bg-white rounded-full text-ink placeholder-ink-faint outline-none focus:ring-2 focus:ring-brand transition text-sm sm:text-base"
           />
@@ -239,6 +255,13 @@ export default function WaitlistComponent({
               updates.
             </span>
           </label>
+
+          {/* Explains the disabled button rather than leaving it a mystery. */}
+          {hasStarted && stillNeeded.length > 0 && (
+            <p className="px-1 text-[13px] leading-snug text-ink-muted text-center">
+              Still needed: {stillNeeded.join(", ")}.
+            </p>
+          )}
 
           <button
             type="submit"
