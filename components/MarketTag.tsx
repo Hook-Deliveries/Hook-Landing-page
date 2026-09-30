@@ -2,7 +2,7 @@ import AutoPlayVideo from "@/components/AutoPlayVideo";
 
 export default function MarketTag() {
   return (
-    <div className="relative flex items-center w-max font-sans drop-shadow-sm">
+    <div className="relative flex items-center w-max font-sans">
       {/* Left Slanted Handle (Sharper Edges) */}
       <div className="relative flex items-center h-[76px] pl-8 pr-12 -mr-8 z-0">
         <svg

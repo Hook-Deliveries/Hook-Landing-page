@@ -23,7 +23,7 @@ export default function ClearPricesCard() {
             src="/images/discount-cards.png"
             alt="Pink 3D discount coupons floating in smoke"
             fill
-            className="object-cover object-bottom drop-shadow-2xl"
+            className="object-cover object-bottom"
             priority
           />
         </div>

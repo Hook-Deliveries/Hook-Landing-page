@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import emailjs from "@emailjs/browser";
 
 const EMPTY_FORM = {
   fullName: "",
@@ -14,7 +13,6 @@ type Toast = { type: "success" | "error"; message: string } | null;
 
 export default function MarketAssociateCards() {
   const [formData, setFormData] = useState(EMPTY_FORM);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [toast, setToast] = useState<Toast>(null);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -36,32 +34,11 @@ export default function MarketAssociateCards() {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSubmitting) return;
-    setIsSubmitting(true);
-    try {
-      await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-        {
-          from_name: formData.fullName,
-          reply_to: formData.email,
-          whatsapp: formData.whatsapp,
-          location: formData.location,
-          market: formData.market,
-        },
-        { publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY! }
-      );
-      // Success: notify with a green toast, then reset the form so it's empty.
-      setFormData(EMPTY_FORM);
-      showToast("success", "Application successful!");
-    } catch (error) {
-      console.error("EmailJS error:", error);
-      showToast("error", "Something went wrong. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
+    // Applications aren't being collected yet — acknowledge and clear the form.
+    setFormData(EMPTY_FORM);
+    showToast("success", "Coming soon!");
   };
 
   return (
@@ -195,10 +172,9 @@ export default function MarketAssociateCards() {
               />
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full mt-2 bg-[#FACC15] hover:bg-[#EAB308] text-white font-bold text-[16px] py-4 rounded-full transition-colors shadow-md disabled:opacity-70"
+                className="w-full mt-2 bg-[#FACC15] hover:bg-[#EAB308] text-white font-bold text-[16px] py-4 rounded-full transition-colors shadow-md"
               >
-                {isSubmitting ? "Submitting..." : "Submit"}
+                Submit
               </button>
             </form>
           </div>

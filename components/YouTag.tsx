@@ -2,7 +2,7 @@ import AutoPlayVideo from "@/components/AutoPlayVideo";
 
 export default function YouTag() {
   return (
-    <div className="relative flex items-center w-max font-sans drop-shadow-sm">
+    <div className="relative flex items-center w-max font-sans">
       {/* Left Slanted Handle */}
       <div className="relative flex items-center h-[76px] pl-10 pr-14 -mr-10 z-0">
         <svg

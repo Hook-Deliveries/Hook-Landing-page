@@ -8,15 +8,15 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="w-full max-w-[1400px] mx-auto font-sans bg-white/80 backdrop-blur-md sticky top-0 z-50">
+    <nav className="w-full max-w-[1400px] mx-auto font-sans bg-white sticky top-0 z-50">
       <div className="flex items-center justify-between px-6 py-5">
         {/* Logo Section */}
         <Link href="/" className="relative flex items-center hover:scale-105 transition-transform">
           <Image
-            src="/images/hook-logo.png"
+            src="/images/hook-logo-v2.png"
             alt="Hook Logo"
             width={110}
-            height={51}
+            height={32}
             className="object-contain"
             priority
           />

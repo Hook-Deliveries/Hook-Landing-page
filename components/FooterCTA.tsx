@@ -1,36 +1,7 @@
-"use client";
-import React, { useState } from "react";
 import Link from "next/link";
-import emailjs from "@emailjs/browser";
+import WaitlistButton from "@/components/WaitlistButton";
 
 export default function FooterCTA() {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-
-  const handleWaitlistSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus("loading");
-
-    try {
-      await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_WAITLIST_TEMPLATE_ID!,
-        {
-          email,
-          waitlist_email: email,
-          from_email: email,
-          reply_to: email,
-        },
-        { publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY! }
-      );
-      setStatus("success");
-      setEmail("");
-    } catch (error) {
-      console.error("EmailJS Error:", error);
-      setStatus("error");
-    }
-  };
-
   return (
     <section className="w-full bg-black py-16 md:py-24 px-4 sm:px-6 font-sans flex flex-col items-center">
       {/* Waitlist Call-To-Action */}
@@ -42,34 +13,14 @@ export default function FooterCTA() {
           Your next favourite fit is just a tap away.
         </p>
 
-        {/* Stacked on Mobile, Inline on Desktop */}
-        <form
-          onSubmit={handleWaitlistSubmit}
-          className="w-full max-w-lg flex flex-col sm:flex-row items-stretch sm:items-center bg-transparent sm:bg-white rounded-[24px] sm:rounded-full p-0 sm:p-1.5 gap-4 sm:gap-0 mb-6 shadow-none sm:shadow-lg"
-        >
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email e.g hook@gmail.com"
-            required
-            className="flex-1 px-6 py-4 sm:py-3 bg-white sm:bg-transparent rounded-full sm:rounded-none text-black outline-none placeholder-gray-400 text-[15px]"
-          />
-          <button
-            type="submit"
-            disabled={status === "loading"}
-            className="w-full sm:w-auto bg-[#FFC107] hover:bg-[#F0B400] text-white font-bold py-4 sm:py-3.5 px-8 rounded-full transition-colors whitespace-nowrap disabled:opacity-70 flex justify-center items-center"
-          >
-            {status === "loading" ? "Joining..." : "Join Waitlist"}
-          </button>
-        </form>
+        {/* Navigates to /waitlist, where the form lives. */}
+        <WaitlistButton />
 
-        {status === "success" && <p className="text-green-400 font-medium mb-4">You&rsquo;ve been added to the waitlist!</p>}
-        {status === "error" && <p className="text-red-400 font-medium mb-4">Something went wrong. Try again.</p>}
-
-        <p className="text-gray-400 text-[15px]">
+        <p className="text-gray-400 text-[15px] mt-6">
           Get notified when Hook goes live.{" "}
-          <Link href="#" className="text-[#FF4500] hover:underline">Join community.</Link>
+          <Link href="#" className="text-[#FF4500] hover:underline">
+            Join community.
+          </Link>
         </p>
       </div>
 

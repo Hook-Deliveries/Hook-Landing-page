@@ -22,7 +22,7 @@ export default function NoCrowdsCard() {
             src="/images/crowd.png"
             alt="3D people cheering and jumping"
             fill
-            className="object-contain object-bottom drop-shadow-2xl"
+            className="object-contain object-bottom"
             priority
           />
         </div>
