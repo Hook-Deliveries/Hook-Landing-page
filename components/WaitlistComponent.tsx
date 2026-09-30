@@ -27,6 +27,7 @@ const EMPTY_FORM = {
   phone: "",
   email: "",
   city: "",
+  itemInterest: "",
 };
 
 type WaitlistError = {
@@ -119,7 +120,13 @@ export default function WaitlistComponent({
         fetch(WAITLIST_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...formData, consent: true }),
+          body: JSON.stringify({
+            ...formData,
+            // Optional on the API; `undefined` is dropped by JSON.stringify,
+            // so a blank answer is omitted rather than sent as "".
+            itemInterest: formData.itemInterest.trim() || undefined,
+            consent: true,
+          }),
         }),
         new Promise((resolve) => setTimeout(resolve, SUBMIT_DELAY_MS)),
       ]);
@@ -178,6 +185,8 @@ export default function WaitlistComponent({
               placeholder="Phone Number"
               autoComplete="tel"
               required
+              pattern="\+?[0-9\s\-]{7,20}"
+              title="Enter a valid phone number"
               className="w-full px-5 py-4 bg-white rounded-full text-ink placeholder-ink-faint outline-none focus:ring-2 focus:ring-brand transition"
             />
           </div>
@@ -204,6 +213,17 @@ export default function WaitlistComponent({
               className="w-full px-5 py-4 bg-white rounded-full text-ink placeholder-ink-faint outline-none focus:ring-2 focus:ring-brand transition"
             />
           </div>
+
+          {/* Optional — the API stores this as `itemInterest` (max 1000). */}
+          <input
+            type="text"
+            name="itemInterest"
+            value={formData.itemInterest}
+            onChange={handleChange}
+            placeholder="What items would you like to shop from Lagos markets when we launch?"
+            maxLength={1000}
+            className="w-full px-5 py-4 bg-white rounded-full text-ink placeholder-ink-faint outline-none focus:ring-2 focus:ring-brand transition text-sm sm:text-base"
+          />
 
           {/* The API requires consent; it is sent as `true` only when ticked. */}
           <label className="flex items-start gap-3 px-1 cursor-pointer select-none">
