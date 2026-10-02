@@ -13,7 +13,12 @@ import FooterCTA from "@/components/FooterCTA";
 
 export default function Home() {
   return (
-    <main className="overflow-x-hidden">
+    <main className="overflow-x-clip">
+      {/* overflow-x: clip, not hidden. `hidden` on one axis forces the other
+          to compute to `auto`, which turned <main> into its own scroll
+          container — it rendered a second scrollbar beside the document's and
+          clipped the last 24px of the footer. `clip` still clips
+          horizontally, without scrolling. */}
       <Navbar />
       <Reveal>
         <FavouriteMarketsWaitlist />

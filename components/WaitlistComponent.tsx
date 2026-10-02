@@ -66,8 +66,11 @@ function readApiError(body: WaitlistError | null): string {
 
 export default function WaitlistComponent({
   showHeading = true,
+  onDone,
 }: {
   showHeading?: boolean;
+  /** Supplied when hosted in the modal: closes it instead of linking home. */
+  onDone?: () => void;
 }) {
   const [formData, setFormData] = useState(EMPTY_FORM);
   const [consent, setConsent] = useState(false);
@@ -304,12 +307,22 @@ export default function WaitlistComponent({
                 : "You are now part of our waitlist. You'll receive an email when Hook launches."}
             </p>
 
-            <Link
-              href="/"
-              className="inline-flex items-center justify-center px-8 py-3 bg-brand hover:bg-brand-strong text-ink font-bold rounded-full transition-colors"
-            >
-              Back to home
-            </Link>
+            {onDone ? (
+              <button
+                type="button"
+                onClick={onDone}
+                className="inline-flex items-center justify-center px-8 py-3 bg-brand hover:bg-brand-strong text-ink font-bold rounded-full transition-colors"
+              >
+                Done
+              </button>
+            ) : (
+              <Link
+                href="/"
+                className="inline-flex items-center justify-center px-8 py-3 bg-brand hover:bg-brand-strong text-ink font-bold rounded-full transition-colors"
+              >
+                Back to home
+              </Link>
+            )}
           </div>
         </div>
       )}

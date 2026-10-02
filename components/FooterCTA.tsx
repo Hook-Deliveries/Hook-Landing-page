@@ -13,7 +13,7 @@ export default function FooterCTA() {
           Your next favourite fit is just a tap away.
         </p>
 
-        {/* Navigates to /waitlist, where the form lives. */}
+        {/* Opens the waitlist form in a modal, without leaving the page. */}
         <WaitlistButton />
 
         <p className="text-gray-400 text-[15px] mt-6">

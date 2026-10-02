@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Inter, Space_Grotesk } from "next/font/google";
 import { site } from "@/lib/site";
+import WaitlistModalProvider from "@/components/WaitlistModal";
 import "./globals.css";
 
 const inter = Inter({
@@ -55,7 +56,9 @@ export default function RootLayout({
 }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+        <WaitlistModalProvider>{children}</WaitlistModalProvider>
+      </body>
     </html>
   );
 }
