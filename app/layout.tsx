@@ -43,6 +43,9 @@ export const metadata: Metadata = {
     title: "Hook — Your Favourite Markets, One Tap Away",
     description: site.tagline,
   },
+  verification: {
+    google: "VcrCQ_krdlL5YHP-705bm2EcydIVZQmnqRmDTLqJOF0",
+  },
 };
 
 export const viewport: Viewport = {
